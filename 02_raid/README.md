@@ -72,8 +72,9 @@ parted /dev/md0 mkpart md0p5 ext4 80% 100%
 
 `for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done`
 
-Монтируем
+Монтируем и записываем данные в /etc/fstab
 ```
 mkdir -p /raid/part{1,2,3,4,5}
 for i in $(seq 1 5); do mount /dev/md0p$i /raid/part$i; done
+for i in $(seq 1 5); do echo "/dev/md0p$i /raid/part$i  ext4 defaults 0 0" >> /etc/fstab; done
 ```
