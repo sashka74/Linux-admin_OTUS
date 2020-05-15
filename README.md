@@ -13,7 +13,7 @@
 - http://xgu.ru/wiki/mdadm
 ---
 
-# LVM
+# 03. LVM
 
 - [LVM Cache](http://man7.org/linux/man-pages/man7/lvmcache.7.html)
 - [sysfs](http://man7.org/linux/man-pages/man5/sysfs.5.html#NOTES)
