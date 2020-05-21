@@ -31,4 +31,4 @@
 - compression
 - dedup
 - ARC / L2ARC
-- ZIL /SLOG
+- ZIL / SLOG
