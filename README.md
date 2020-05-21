@@ -21,3 +21,14 @@
 - [LVM Snapshot & Virtualization](https://www.ibm.com/developerworks/ru/library/l-lvm2/)
 - [RedHat LVM Administrator Guide](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index) [RU](https://access.redhat.com/documentation/ru-ru/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-clvm-overview-cso)
 - [как используется дисковое пространство в Linux](https://habr.com/ru/company/flant/blog/354802/)
+---
+
+# 04. ZFS
+
+- [zfs Solaris](https://docs.oracle.com/cd/E19253-01/820-0836/)
+- [install zfs](https://github.com/openzfs/zfs/wiki/RHEL-and-CentOS)
+- RAIDZ
+- compression
+- dedup
+- ARC / L2ARC
+- ZIL /SLOG
