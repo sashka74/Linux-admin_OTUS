@@ -12,21 +12,41 @@ wget -O War_and_Peace.txt http://www.gutenberg.org/ebooks/2600.txt.utf-8
 
 ## Выполнение
 
-__Добавляем официальный репозиторий OpenZFS, согласно версии ОС,в нашем случае centos8__
+__#Добавляем официальный репозиторий OpenZFS, согласно версии ОС,в нашем случае centos8__
 
 `yum install http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm`
 
-__Чтобы использовать репозиторий на основе kABI редактируем файл zfs.repo__ 
+__#Чтобы использовать репозиторий на основе kABI редактируем файл *zfs.repo*__ 
 ```
 # /etc/yum.repos.d/zfs.repo
 [zfs]
+enabled=1
 ```
 _~~enabled=1~~_\
 _enabled=0_
 ```
-
+[zfs-kmod]
+enabled=0
 ```
+_~~enabled=0~~_\
+_enabled=1_
 
+__#Устанавливаем zfs__
+```
+yum install zfs 
+```
+__#Перезагружаем систему__
+```
+reboot
+```
+__#Включаем модуль ядра zfs__
+```
+modprobe zfs
+``` 
+__#Создаем pool зеркало из двух дисков__
+```
+zpool create storage mirror /dev/sdb /dev/sdc
+```
 ## 2.Определить настройки pool’a
 
 - Загрузить архив с файлами локально и распаковать.\
