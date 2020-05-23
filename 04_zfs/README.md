@@ -10,6 +10,22 @@
 wget -O War_and_Peace.txt http://www.gutenberg.org/ebooks/2600.txt.utf-8
 либо скачать файл ядра распаковать и расположить на файловой системе 
 
+## Выполнение
+
+__Добавляем официальный репозиторий OpenZFS, согласно версии ОС,в нашем случае centos8__
+
+`yum install http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm`
+
+__Чтобы использовать репозиторий на основе kABI редактируем файл zfs.repo__ 
+```
+# /etc/yum.repos.d/zfs.repo
+[zfs]
+```
+_~~enabled=1~~_\
+_enabled=0_
+```
+
+```
 
 ## 2.Определить настройки pool’a
 
