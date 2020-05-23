@@ -75,14 +75,14 @@ storage/number2 |  24K | 4.36G |   24K   |  /storage/number2
 storage/number3 |  24K | 4.36G |   24K   |  /storage/number3
 storage/number4 |  24K | 4.36G |   24K   |  /storage/number4
 ```
-__Прменяем ~~одинаковые~~ разные алгоритмы сжатия к файловым системам number1-4__
+__Прменяем ~~одинаковое~~ разное сжатие к файловым системам number1-4__
 ```
 #zfs set compression=lzjb storage/number1
 #zfs set compression=gzip-9 storage/number2
 #zfs set compression=zle storage/number3
 #zfs set compression=lz4 storage/number4
 ```
-__Проверяем применились ли алгоритмы сжатия к файловым системам__
+__Проверяем применилось ли сжатие к файловым системам__
 ```
 #zfs get compression
 
@@ -103,7 +103,7 @@ __Скачиваем архив ядра и распаковываем на фа
 #tar -xf linux-5.6.13.tar.xz -C /storage/number3
 #tar -xf linux-5.6.13.tar.xz -C /storage/number4
 ```
-__Проверяем степень сжатия разных алгоритмов на файловых системах__
+__Проверяем степень сжатия на файловых системах__
 ```
 #zfs get compression,compressratio
 
@@ -135,8 +135,87 @@ https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
 - какая контрольная сумма используется 
 
 ## Выполнение
+__Скачиваем архив с файлами и распаковываем его__
+```
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O zfs_task1.tar.gz && rm -rf /tmp/cookies.txt
 
+#tar -zxf zfs_task1.tar.gz
+```
+__Смотрим что мы получили в результате распаковки скаченного архива__
+```
+#ls
 
+linux-5.6.13.tar.xz           zfs_task1.tar.gz
+zfs-release.el8_0.noarch.rpm  zpoolexport
+```
+__Проверяем pool находящийся в папке "zpoolexport" и узнаем его тип__
+```
+#zpool import -d zpoolexport/
+
+pool: otus
+     id: 6554193320433390805
+  state: ONLINE
+ action: The pool can be imported using its name or numeric identifier.
+ config:
+
+	otus                                 ONLINE
+	  mirror-0                           ONLINE
+	    /home/vagrant/zpoolexport/filea  ONLINE
+	    /home/vagrant/zpoolexport/fileb  ONLINE
+```
+__Импортируем pool "otus", проверяем появился ли он в списке pool-ов и узнаем его размер__
+```
+#zpool import otus -d zpoolexport
+#zpool list
+
+NAME    |  SIZE  | ALLOC |  FREE | CKPOINT | EXPANDSZ | FRAG | CAP  | DEDUP | HEALTH  ALTROOT
+--------|--------|-------|-------|---------|----------|------|------|-------|---------|-------
+otus    |   480M | 2.18M |  478M |    -    |     -    |  0%  |   0% | 1.00x | ONLINE  |  -
+storage |  4.50G | 1.89G | 2.61G |    -    |     -    |  0%  |  41% | 1.00x | ONLINE  |  -
+```
+__Узнаем значение recordsize__
+```
+#zfs get recordsize 
+
+NAME           |  PROPERTY  |  VALUE |   SOURCE
+---------------|------------|--------|--------------------
+otus           | recordsize | 128K   |   local
+otus/hometask2 | recordsize | 128K   |  inherited from otus
+```
+__Проверяем какое используется сжатие и контрольная сумма__
+```
+#zfs get compression,compressratio
+
+NAME            | PROPERTY      | VALUE   |  SOURCE
+----------------|---------------|---------|---------------------
+otus            | compression   | zle     |  local
+otus            | compressratio | 1.00x   |  -
+otus/hometask2  | compression   | zle     |  inherited from otus
+otus/hometask2  | compressratio | 1.00x   |  -
+storage         | compression   | off     |  default
+storage         | compressratio | 2.07x   |  -
+storage/number1 | compression   | lzjb    |  local
+storage/number1 | compressratio | 2.41x   |  -
+storage/number2 | compression   | gzip-9  |  local
+storage/number2 | compressratio | 4.33x   |  -
+storage/number3 | compression   | zle     |  local
+storage/number3 | compressratio | 1.08x   |  -
+storage/number4 | compression   | lz4     |  local
+storage/number4 | compressratio | 2.79x   |  -
+```
+```
+#zfs get checksum
+
+NAME            | PROPERTY | VALUE   |   SOURCE
+----------------|----------|---------|----------------------
+otus            | checksum | sha256  |   local
+otus/hometask2  | checksum | sha256  |   inherited from otus
+storage         | checksum |   on    |   default
+storage/number1 | checksum |   on    |   default
+storage/number2 | checksum |   on    |   default
+storage/number3 | checksum |   on    |   default
+storage/number4 | checksum |   on    |   default
+```
 ## 3.Найти сообщение от преподавателей
 
 - Скопировать файл из удаленной директории.\
