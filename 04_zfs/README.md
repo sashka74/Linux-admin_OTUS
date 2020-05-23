@@ -177,10 +177,15 @@ __Узнаем значение recordsize__
 ```
 #zfs get recordsize 
 
-NAME           |  PROPERTY  |  VALUE |   SOURCE
----------------|------------|--------|--------------------
-otus           | recordsize | 128K   |   local
-otus/hometask2 | recordsize | 128K   |  inherited from otus
+NAME            |  PROPERTY  |  VALUE |   SOURCE
+----------------|------------|--------|--------------------
+otus            | recordsize | 128K   |  local
+otus/hometask2  | recordsize | 128K   |  inherited from otus
+storage         | recordsize | 128K   |  default
+storage/number1 | recordsize | 128K   |  default
+storage/number2 | recordsize | 128K   |  default
+storage/number3 | recordsize | 128K   |  default
+storage/number4 | recordsize | 128K   |  default
 ```
 __Проверяем какое используется сжатие и контрольная сумма__
 ```
@@ -216,6 +221,15 @@ storage/number2 | checksum |   on    |   default
 storage/number3 | checksum |   on    |   default
 storage/number4 | checksum |   on    |   default
 ```
+__Вывод:__ 
+
+1. pool otus:
+	1. type=mirror-0 
+	2. size=480M 
+	3. checksum=sha256 
+	4. compression=zle 
+	5. recordsize=128K
+	
 ## 3.Найти сообщение от преподавателей
 
 - Скопировать файл из удаленной директории.\
