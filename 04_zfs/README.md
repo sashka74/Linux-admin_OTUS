@@ -243,7 +243,7 @@ zfs send otus/storage@task2 > otus_task2.file
 ## Выполнение
 __Скачиваем файл otus_task2.file__
 ```
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O otus_task2.file && rm -rf /tmp/cookies.txt
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O otus_task2.file && rm -rf /tmp/cookies.txt
 ```
 __Применяем операцию получения файловой системы__
 ```
