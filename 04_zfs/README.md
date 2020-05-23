@@ -52,7 +52,7 @@ __Проверяем созданный pool__
 #zpool list
 
 
-NAME    |  SIZE | ALLOC | FREE  | CKPOINT | EXPANDSZ | FRAG | CAP | DEDUP | HEALTH | ALTROOT\
+NAME    |  SIZE | ALLOC | FREE  | CKPOINT | EXPANDSZ | FRAG | CAP | DEDUP | HEALTH | ALTROOT
 --------|-------|-------|-------|---------|----------|------|-----|-------|--------|---------
 storage | 4.50G |  93K  | 4.50G |    -    |    -     |  0%  |  0% | 1.00x | ONLINE |   -
 ```
