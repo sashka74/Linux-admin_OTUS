@@ -43,7 +43,7 @@ __Включаем модуль ядра zfs__
 ```
 #modprobe zfs
 ``` 
-__Создаем pool зеркало из двух дисков__
+__Создаем pool "storage" тип-mirror из двух дисков__
 ```
 #zpool create storage mirror /dev/sdb /dev/sdc
 ```
