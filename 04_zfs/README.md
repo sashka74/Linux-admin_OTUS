@@ -12,11 +12,11 @@ wget -O War_and_Peace.txt http://www.gutenberg.org/ebooks/2600.txt.utf-8
 
 ## Выполнение
 
-__#Добавляем официальный репозиторий OpenZFS, согласно версии ОС,в нашем случае centos8__
+__Добавляем официальный репозиторий OpenZFS, согласно версии ОС,в нашем случае centos8__
 
-`yum install http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm`
+`#yum install http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm`
 
-__#Чтобы использовать репозиторий на основе kABI редактируем файл *zfs.repo*__ 
+__Чтобы использовать репозиторий на основе kABI редактируем файл *zfs.repo*__ 
 ```
 # /etc/yum.repos.d/zfs.repo
 [zfs]
@@ -31,22 +31,97 @@ enabled=0
 _~~enabled=0~~_\
 _enabled=1_
 
-__#Устанавливаем zfs__
+__Устанавливаем zfs__
 ```
-yum install zfs 
+#yum install zfs 
 ```
-__#Перезагружаем систему__
+__Перезагружаем систему__
 ```
-reboot
+#reboot
 ```
-__#Включаем модуль ядра zfs__
+__Включаем модуль ядра zfs__
 ```
-modprobe zfs
+#modprobe zfs
 ``` 
-__#Создаем pool зеркало из двух дисков__
+__Создаем pool зеркало из двух дисков__
 ```
-zpool create storage mirror /dev/sdb /dev/sdc
+#zpool create storage mirror /dev/sdb /dev/sdc
 ```
+__Проверяем созданный pool__
+```
+#zpool list
+
+
+NAME    |  SIZE | ALLOC | FREE  | CKPOINT | EXPANDSZ | FRAG | CAP | DEDUP | HEALTH | ALTROOT\
+--------|-------|-------|-------|---------|----------|------|-----|-------|--------|---------
+storage | 4.50G |  93K  | 4.50G |    -    |    -     |  0%  |  0% | 1.00x | ONLINE |   -
+```
+__Создаем файловые системы__
+```
+#zfs create storage/number1
+#zfs create storage/number2
+#zfs create storage/number3
+#zfs create storage/number4
+```
+__Проверяем файловые системы, которые мы создали__
+```
+#zfs list
+
+NAME            | USED | AVAIL |  REFER  | MOUNTPOINT
+----------------|------|-------|---------|-----------------
+storage         | 196K | 4.36G |   28K   |  /storage
+storage/number1 |  24K | 4.36G |   24K   |  /storage/number1
+storage/number2 |  24K | 4.36G |   24K   |  /storage/number2
+storage/number3 |  24K | 4.36G |   24K   |  /storage/number3
+storage/number4 |  24K | 4.36G |   24K   |  /storage/number4
+```
+__Прменяем ~~одинаковые~~ разные алгоритмы сжатия к файловым системам number1-4__
+```
+#zfs set compression=lzjb storage/number1
+#zfs set compression=gzip-9 storage/number2
+#zfs set compression=zle storage/number3
+#zfs set compression=lz4 storage/number4
+```
+__Проверяем применились ли алгоритмы сжатия к файловым системам__
+```
+#zfs get compression
+
+NAME            | PROPERTY     | VALUE    | SOURCE
+--------------- |--------------|----------|---------
+storage         |  compression | off      | default
+storage/number1 |  compression | lzjb     | local
+storage/number2 |  compression | gzip-9   | local
+storage/number3 |  compression | zle      | local
+storage/number4 |  compression | lz4      | local
+```
+__Скачиваем архив ядра и распаковываем на файловые системы number1-4__
+```
+#wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.6.13.tar.xz
+
+#tar -xf linux-5.6.13.tar.xz -C /storage/number1
+#tar -xf linux-5.6.13.tar.xz -C /storage/number2
+#tar -xf linux-5.6.13.tar.xz -C /storage/number3
+#tar -xf linux-5.6.13.tar.xz -C /storage/number4
+```
+__Проверяем степень сжатия разных алгоритмов на файловых системах__
+```
+#zfs get compression,compressratio
+
+NAME            | PROPERTY      |  VALUE  |  SOURCE
+----------------|---------------|---------|----------
+storage         | compression   | off     |  default
+storage         | compressratio | 2.07x   |  -
+storage/number1 | compression   | lzjb    |  local
+storage/number1 | compressratio | 2.41x   |  -
+storage/number2 | compression   | gzip-9  |  local
+storage/number2 | compressratio | 4.33x   |  -
+storage/number3 | compression   | zle     |  local
+storage/number3 | compressratio | 1.08x   |  -
+storage/number4 | compression   | lz4     |  local
+storage/number4 | compressratio | 2.79x   |  -
+```
+__Вывод: *Наибольшей степени сжатия данных`(4.33x)`, среди используемых алгоритмов, удалось добиться применив gzip-9*.__
+
 ## 2.Определить настройки pool’a
 
 - Загрузить архив с файлами локально и распаковать.\
@@ -58,6 +133,8 @@ https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
 - значение recordsize
 - какое сжатие используется
 - какая контрольная сумма используется 
+
+## Выполнение
 
 
 ## 3.Найти сообщение от преподавателей
