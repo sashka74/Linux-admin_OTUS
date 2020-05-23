@@ -239,3 +239,47 @@ https://drive.google.com/file/d/1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG/view?usp=shari
 
 Файл был получен командой
 zfs send otus/storage@task2 > otus_task2.file
+
+## Выполнение
+__Скачиваем файл otus_task2.file__
+```
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O otus_task2.file && rm -rf /tmp/cookies.txt
+```
+__Применяем операцию получения файловой системы__
+```
+#zfs receive otus/storage@task2 < otus_task2.file
+```
+__Проверяем, что файловая система появилась и примантировалась__
+```
+#df -h
+
+Filesystem      | Size | Used | Avail | Use% | Mounted on
+----------------|------|------|-------|------|------------------
+devtmpfs        | 479M |    0 |  479M |   0% | /dev
+tmpfs           | 491M |    0 |  491M |   0% | /dev/shm
+tmpfs           | 491M |  13M |  479M |   3% | /run
+tmpfs           | 491M |    0 |  491M |   0% | /sys/fs/cgroup
+/dev/sda1       |  10G | 9.3G |  715M |  94% | /
+storage         | 2.5G | 128K |  2.5G |   1% | /storage
+storage/number4 | 2.9G | 364M |  2.5G |  13% | /storage/number4
+storage/number3 | 3.4G | 912M |  2.5G |  27% | /storage/number3
+storage/number1 | 2.9G | 418M |  2.5G |  15% | /storage/number1
+storage/number2 | 2.8G | 240M |  2.5G |   9% | /storage/number2
+tmpfs           |  99M |    0 |   99M |   0% | /run/user/1000
+otus            | 348M | 128K |  347M |   1% | /otus
+otus/hometask2  | 349M | 1.9M |  347M |   1% | /otus/hometask2
+otus/storage    | 350M | 2.9M |  347M |   1% | /otus/storage
+```
+__Запускаем поиск файла используя утилиту `find`__
+```
+#find /otus/ -name secret_message
+
+/otus/storage/task1/file_mess/secret_message
+```
+__Выводим содержимое файла используя команду `cat`__
+```
+#cat /otus/storage/task1/file_mess/secret_message
+
+https://github.com/sindresorhus/awesome
+```
+__Вывод: [секретное сообщение](https://github.com/sindresorhus/awesome).__
