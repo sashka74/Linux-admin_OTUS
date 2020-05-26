@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "centos/8"
+#  config.vm.box_check_update = false
+
+
+  config.vm.define "srv" do |srv|
+      srv.vm.network  "private_network", ip: "192.168.1.160"
+      srv.vm.hostname = "srv"  
+      srv.vm.provider "virtualbox" do |vb|
+         vb.memory = "2048"
+      srv.vm.provision "shell", inline: <<-SHELL
+              mkdir -p ~root/.ssh
+              cp ~vagrant/.ssh/auth* ~root/.ssh
+          SHELL
+          srv.vm.provision "NFS", type: "shell" do |s|
+                s.inline = <<-SHELL              
+                        yum install -y nfs-utils
+                        mkdir -p /home/share
+                        mkdir -p /home/share/upload
+                        echo "/home/share 192.168.1.161(rw,no_root_squash)" >> /etc/exports
+                        systemctl start nfs-server
+                        systemctl enable nfs-server
+                        sed -i -r 's/# vers3=y/ vers3=y/' /etc/nfs.conf
+                        sed -i -r 's/# tcp=y/ udp=y/' /etc/nfs.conf
+                        service nfs-server restart
+                        service firewalld start
+                        systemctl enable firewalld
+                        firewall-cmd --permanent --zone=public --add-port=2049/udp
+                        firewall-cmd --permanent --zone=public --add-port=111/udp
+                        firewall-cmd --permanent --zone=public --add-port=49631/udp
+                        firewall-cmd --permanent --zone=public --add-port=20048/udp
+                        firewall-cmd --permanent --zone=public --add-port=36526/udp
+                        firewall-cmd --reload
+                SHELL
+         end
+      end
+  end
+
+ config.vm.define "cli" do |cli|
+     cli.vm.network "private_network", ip: "192.168.1.161"
+     cli.vm.hostname = "cli"  
+     cli.vm.provider "virtualbox" do |vb|
+         vb.memory = "1024"
+     cli.vm.provision "shell", inline: <<-SHELL
+              mkdir -p ~root/.ssh
+              cp ~vagrant/.ssh/auth* ~root/.ssh
+              yum install -y nfs-utils
+              mkdir -p /home/share
+              mount -o vers=3,proto=udp 192.168.1.160:/home/share /home/share
+              echo "192.168.1.160:/home/share /home/share nfs nfsvers=3,udp,rsize=32768,wsize=32768 0 0" >> /etc/fstab
+          SHELL
+
+     end
+ end
+end
