@@ -32,3 +32,10 @@
 - dedup
 - ARC / L2ARC
 - ZIL / SLOG
+
+# 05. NFS,FUSE
+
+- [Red Hat Linux 7.3: Официальное справочное руководство по Red Hat Linux](https://www-uxsup.csx.cam.ac.uk/pub/doc/redhat/redhat7.3/rhl-rg-en-7.3/ch-nfs.html)
+- [ФАЙЛ КОНФИГУРАЦИИ / ETC / EXPORTS](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/5/html/deployment_guide/s1-nfs-server-config-exports#s1-nfs-server-config-exportfs)
+- [Linux NFS, FAQ](http://nfs.sourceforge.net/)
+- [Oracle® Linux 7Руководство администратора](https://docs.oracle.com/en/operating-systems/oracle-linux/7/admin/ol7-cfgsvr-nfs.html)
