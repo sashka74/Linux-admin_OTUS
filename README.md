@@ -39,3 +39,14 @@
 - [ФАЙЛ КОНФИГУРАЦИИ / ETC / EXPORTS](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/5/html/deployment_guide/s1-nfs-server-config-exports#s1-nfs-server-config-exportfs)
 - [Linux NFS, FAQ](http://nfs.sourceforge.net/)
 - [Oracle® Linux 7Руководство администратора](https://docs.oracle.com/en/operating-systems/oracle-linux/7/admin/ol7-cfgsvr-nfs.html)
+
+# 06. Boot, BIOS, GRUB
+
+/proc/cmdline - строка запуска ядра, конфигурация
+
+### Utilites & man pages
+bootparam, mkinitrd
+
+- [initrd](https://en.wikipedia.org/wiki/Initial_ramdisk)
+
+
