@@ -1,0 +1,65 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "centos/8"
+#  config.vm.box_check_update = false
+
+
+  config.vm.define "srv" do |srv|
+      srv.vm.network  "private_network", ip: "192.168.1.160"
+      srv.vm.hostname = "srv"  
+      srv.vm.provider "virtualbox" do |vb|
+         vb.memory = "2048"
+      srv.vm.provision "shell", inline: <<-SHELL
+              mkdir -p ~root/.ssh
+              cp ~vagrant/.ssh/auth* ~root/.ssh
+          SHELL
+          srv.vm.provision "systemd", type: "shell" do |s|
+                s.inline = <<-SHELL              
+                        touch /etc/sysconfig/watchlog
+                        echo "# Configuration file for my watchdog service \n# Place it to /etc/sysconfig \n# File and word in that file that we will be monit \nWORD="ALERT" \nLOG=/var/log/watchlog.log" >> /etc/sysconfig/watchlog
+                        sed -i -r 's/ALERT/"ALERT"/' /etc/sysconfig/watchlog
+                        touch /var/log/watchlog.log
+                        echo "ALERT" >> /var/log/watchlog.log
+                        touch /opt/watchlog.sh
+                        chmod u+x /opt/watchlog.sh
+                        echo "#!/bin/bash \n \nWORD= \nLOG= \nDATE= \nif grep "$WORD" "$LOG" &> /dev/null \nthen \nlogger "$DATE: I found word, Master!" \nelse \n    exit 0 \nfi" >> /opt/watchlog.sh
+                        sed -i -r 's/WORD=/WORD=$1/' /opt/watchlog.sh
+                        sed -i -r 's/LOG=/LOG=$2/' /opt/watchlog.sh
+                        sed -i -r 's/DATE=/DATE=$(date)/' /opt/watchlog.sh
+                        sed -i -r 's/if grep/if grep $WORD $LOG/' /opt/watchlog.sh
+                        sed -i -r 's/logger : I found word, Master!/    logger "$DATE: I found word, Master!"/' /opt/watchlog.sh
+                        touch /etc/systemd/system/watchlog.service && touch /etc/systemd/system/watchlog.timer
+                        echo "[Unit] \nDescription=My watchlog service \n[Service] \nType=oneshot \nEnvironmentFile=/etc/sysconfig/watchlog \nExecStart=/opt/watchlog.sh" >> /etc/systemd/system/watchlog.service
+                        sed -i -r 's/watchlog.sh/watchlog.sh $WORD $LOG/' /etc/systemd/system/watchlog.service
+                        echo "[Unit] \nDescription=Run watchlog script every 30 second \n[Timer] \n# Run every 30 second \nOnUnitActiveSec=30 \nUnit=watchlog.service \n[Install] \nWantedBy=multi-user.target" >> /etc/systemd/system/watchlog.timer
+                        yum install epel-release -y && yum install spawn-fcgi php php-cli mod_fcgid httpd -y
+                        sed -i -r 's/#SOCKET/SOCKET/' /etc/sysconfig/spawn-fcgi
+                        sed -i -r 's/#OPTIONS/OPTIONS/' /etc/sysconfig/spawn-fcgi
+                        touch /etc/systemd/system/spawn-fcgi.service
+                        echo "[Unit] \nDescription=Spawn-fcgi startup service by Otus \nAfter=network.target \n[Service] \nType=simple \nPIDFile=/var/run/spawn-fcgi.pid \nEnvironmentFile=/etc/sysconfig/spawn-fcgi \nExecStart=/usr/bin/spawn-fcgi -n $OPTIONS \nKillMode=process \n[Install] \nWantedBy=multi-user.target" >> /etc/systemd/system/spawn-fcgi.service
+                        sed -i -r 's/spawn-fcgi -n/spawn-fcgi -n $OPTIONS/' /etc/systemd/system/spawn-fcgi.service
+                        systemctl daemon-reload
+                        systemctl start watchlog.timer
+                        systemctl start watchlog.service
+                        systemctl start spawn-fcgi.service
+                        cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/first.conf
+                        cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/second.conf
+                        sed -i -r 's/IncludeOptional/#IncludeOptional/' /etc/httpd/conf/first.conf
+                        sed -i -r 's/IncludeOptional/#IncludeOptional/' /etc/httpd/conf/second.conf
+                        sed -i -r 's/Listen 80/Listen 8080/' /etc/httpd/conf/second.conf
+                        sed -i '34 a PidFile /var/run/httpd-second.pid' /etc/httpd/conf/second.conf
+                        sed -i '23 a EnvironmentFile=/etc/sysconfig/httpd-%I' /usr/lib/systemd/system/httpd.service
+                        touch /etc/sysconfig/httpd-first
+                        touch /etc/sysconfig/httpd-second
+                        echo "OPTIONS=-f conf/first.conf" >> /etc/sysconfig/httpd-first
+                        echo "OPTIONS=-f conf/second.conf" >> /etc/sysconfig/httpd-second
+                        systemctl start httpd@first
+                        systemctl start httpd@second
+                SHELL
+         end
+      end
+  end
+end
+
