@@ -69,3 +69,14 @@ Systemd-nspawn
 - [Using systemd features to secure services](https://www.redhat.com/sysadmin/systemd-secure-services)
 
 ---
+# 09. Package managemen
+- RPM
+- сборка собственного rpm
+- mock
+- dnf
+- snap
+### Utilites & man pages
+- [RPM Packaging Guide](https://rpm-packaging-guide.github.io/)
+- [RPM PACKAGING GUIDE Red Hat](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html-single/rpm_packaging_guide/index)
+- [Сборка RPM - быстрый старт](http://wiki.rosalab.ru/ru/index.php/%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0_RPM_-_%D0%B1%D1%8B%D1%81%D1%82%D1%80%D1%8B%D0%B9_%D1%81%D1%82%D0%B0%D1%80%D1%82)
+- [Руководство пользователя и разработчика RPM](http://www.opennet.ru/docs/RUS/rpm_guide/)
