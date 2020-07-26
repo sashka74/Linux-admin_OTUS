@@ -170,6 +170,6 @@ quit
 ```
 # 11. Ansible
 
--[Динамическое инвентори в Ansible](https://medium.com/@Nklya/%D0%B4%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5-%D0%B8%D0%BD%D0%B2%D0%B5%D0%BD%D1%82%D0%BE%D1%80%D0%B8-%D0%B2-ansible-9ee880d540d6)
--[User Guide](https://docs.ansible.com/ansible/latest/user_guide/index.html)
--[Jinja](https://jinja.palletsprojects.com/en/2.10.x/)
+- [Динамическое инвентори в Ansible](https://medium.com/@Nklya/%D0%B4%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5-%D0%B8%D0%BD%D0%B2%D0%B5%D0%BD%D1%82%D0%BE%D1%80%D0%B8-%D0%B2-ansible-9ee880d540d6)
+- [User Guide](https://docs.ansible.com/ansible/latest/user_guide/index.html)
+- [Jinja](https://jinja.palletsprojects.com/en/2.10.x/)
