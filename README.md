@@ -173,3 +173,29 @@ quit
 - [Динамическое инвентори в Ansible](https://medium.com/@Nklya/%D0%B4%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5-%D0%B8%D0%BD%D0%B2%D0%B5%D0%BD%D1%82%D0%BE%D1%80%D0%B8-%D0%B2-ansible-9ee880d540d6)
 - [User Guide](https://docs.ansible.com/ansible/latest/user_guide/index.html)
 - [Jinja](https://jinja.palletsprojects.com/en/2.10.x/)
+
+# 12. PAM
+
+- [Основы и настройка PAM](https://www.ibm.com/developerworks/ru/library/l-pam/index.html)
+- [The Linux-PAM Guides](http://www.linux-pam.org/Linux-PAM-html/)
+- [Как работает PAM](https://www.opennet.ru/base/net/pam_linux.txt.html)
+- [pam_script](https://linux.die.net/man/5/pam_script)
+- [CAP_SYS_ADMIN](https://lwn.net/Articles/486306/)
+
+### Базовые утилиты для работы с пользователями и правами
+```bash
+useradd
+passwd
+usermod
+userdel
+groupadd
+groupdel
+groupmod
+groups
+id
+newgrp
+gpasswd
+chgrp
+chown
+chmod
+```
