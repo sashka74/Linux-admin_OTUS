@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :nginx => {
+        :box_name => "centos/8",
+        :ip_addr => '192.168.11.150'
+  }
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+      config.vm.define boxname do |box|
+
+          box.vm.box = boxconfig[:box_name]
+          box.vm.host_name = boxname.to_s
+
+          box.vm.network "private_network", ip: boxconfig[:ip_addr]
+
+          box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "200"]
+          end
+          
+          box.vm.provision "shell", inline: <<-SHELL
+            mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+            useradd -m -s /bin/bash user1 && useradd -m -s /bin/bash user2
+            groupadd admin && gpasswd -a user1 admin && usermod -g admin user1 && gpasswd -a vagrant admin && gpasswd -a root admin         
+            echo "Otus2020"|sudo passwd --stdin user1 && echo "Otus2020"|sudo passwd --stdin user2
+            sed -i "5 a  account    [success=1 default=ok] pam_listfile.so item=group sense=allow file=/etc/sec/groups onerr=fail" /etc/pam.d/sshd
+            sed -i "6 a  account    required     pam_time.so" /etc/pam.d/sshd 
+            mkdir /etc/sec/ && touch /etc/sec/groups && echo "admin" >> /etc/sec/groups
+            echo "*;*;*;!Wd" >> /etc/security/time.conf
+            systemctl restart sshd
+          SHELL
+
+      end
+  end
+end
