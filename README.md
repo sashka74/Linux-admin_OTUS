@@ -199,3 +199,9 @@ chgrp
 chown
 chmod
 ```
+# 12. SELinux
+
+### Utilites & man pages
+sesearch, seinfo, findcon, audit2allow, audit2why, chcon, restorecon, autorelabel, getsebool, setsebool
+
+- SELinux/Tutorials/How does a process get into a certain context
