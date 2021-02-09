@@ -204,7 +204,7 @@ chmod
 ### Utilites & man pages
 sesearch, seinfo, findcon, audit2allow, audit2why, chcon, restorecon, autorelabel, getsebool, setsebool
 
-- SELinux/Tutorials/How does a process get into a certain context
+- [SELinux/Tutorials/How does a process get into a certain context](https://wiki.gentoo.org/wiki/SELinux/Tutorials/How_does_a_process_get_into_a_certain_context)
 
 # 14. Docker
 
