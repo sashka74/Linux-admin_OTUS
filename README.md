@@ -208,3 +208,8 @@ sesearch, seinfo, findcon, audit2allow, audit2why, chcon, restorecon, autorelabe
 
 # 14. Docker
 
+# 15. Monitoring and alerting
+- [ZABBIX DOCUMENTATION](https://www.zabbix.com/documentation/3.4/ru/start)
+- [Prometheus GETTING STARTED](https://prometheus.io/docs/prometheus/latest/getting_started/)
+- [Управление сетевой инфраструктурой по протоколу SNMP](https://www.ibm.com/developerworks/ru/library/snmp_essentials_01/index.html)
+
