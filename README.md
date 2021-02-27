@@ -213,3 +213,9 @@ sesearch, seinfo, findcon, audit2allow, audit2why, chcon, restorecon, autorelabe
 - [Prometheus GETTING STARTED](https://prometheus.io/docs/prometheus/latest/getting_started/)
 - [Управление сетевой инфраструктурой по протоколу SNMP](https://www.ibm.com/developerworks/ru/library/snmp_essentials_01/index.html)
 
+# 16. Logs
+- [Аудит системных событий в Linux](https://habr.com/en/company/selectel/blog/267833/)
+- [Kdump — диагностика и анализ причин сбоев ядра](https://habr.com/en/company/selectel/blog/226487/)
+- [Настройка Rsyslog](https://www.k-max.name/linux/rsyslog-na-debian-nastrojka-servera/)
+- [Аудит системных событий](https://xakep.ru/2011/03/30/54897/)
+- [Анализ падения ядра в Linux](http://geckich.blogspot.com/2013/11/linux-kernel-crash-dump.html)
